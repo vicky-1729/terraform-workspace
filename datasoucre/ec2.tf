@@ -1,24 +1,9 @@
 resource "aws_instance" "roboshop" {
-  count = 4 #
-  ami           = var.ami_id
-  instance_type = "t2.small"
+  ami           = data.aws_ami.ami_id.id
+  instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_all.id]
-  tags = {
-    Name = "${var.instance_name[count.index]}-dev-server"
-  }
+  tags = var.tags_name
 }
-
-# resource "aws_instance" "server" {
-#   count = 4 # create four similar EC2 instances
-
-#   ami           = var.ami_id
-#   instance_type = "t2.micro"
-
-#   tags = {
-#     Name = "Server ${count.index}"
-#   }
-# }
-
 
 resource "aws_security_group" "allow_all" {
   # ... other configuration ...
@@ -33,6 +18,7 @@ resource "aws_security_group" "allow_all" {
         cidr_blocks      = var.cidr_blocks
         ipv6_cidr_blocks = ["::/0"]
       }
+      
 # outgoing traffic
   egress {
     from_port        = var.from_port
