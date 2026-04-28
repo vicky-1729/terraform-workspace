@@ -1,10 +1,21 @@
 resource "aws_instance" "roboshop" {
+  for_each = var.instance_tags
   ami           = var.ami_id
-  instance_type = var.instance_type
+  instance_type = each.value
   vpc_security_group_ids = [aws_security_group.allow_all.id]
-  tags = var.tags_name
+  tags = {
+    Name = "${each.key}-server-dev"
+  }
 }
-
+# resource "aws_instance" "roboshop" {
+#   for_each = toset(var.tags_name) # convert to map
+#   ami           = var.ami_id
+#   instance_type = "t2.micro"
+#   vpc_security_group_ids = [aws_security_group.allow_all.id]
+#   tags = {
+#     Name = "${each.key}-server-dev"
+#   }
+# }
 resource "aws_security_group" "allow_all" {
   # ... other configuration ...
   
@@ -18,7 +29,6 @@ resource "aws_security_group" "allow_all" {
         cidr_blocks      = var.cidr_blocks
         ipv6_cidr_blocks = ["::/0"]
       }
-      
 # outgoing traffic
   egress {
     from_port        = var.from_port
