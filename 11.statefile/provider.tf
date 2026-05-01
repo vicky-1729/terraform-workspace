@@ -1,3 +1,8 @@
+#============================================================
+# Provider Configuration (Local State)
+# No backend block = state stored locally as terraform.tfstate
+#============================================================
+
 terraform {
   required_providers {
     aws = {
@@ -8,7 +13,6 @@ terraform {
 }
 
 provider "aws" {
-  # Configuration options
   region = "us-east-1"
 }
 

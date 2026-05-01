@@ -1,18 +1,25 @@
+#============================================================
+# Variables for Conditional Expression Demo
+#============================================================
+
 variable "ami_id" {
     type = string
   default = "ami-0220d79f3f480ecf5"
 }
 
+# instance_type is NOT defined here - it's computed using condition in ec2.tf
 # variable "instance_type" {
 #     type = string
 #     default = "t3.micro"
 # }
 
+# This variable drives the conditional logic
+# Change to "prod" and run terraform plan to see the difference
 variable "env" {
     type = string
-    default = "dev"
-  
+    default = "dev"   # dev = t3.small | prod = t2.micro
 }
+
 variable "tags_name" {
     type = map(string)
     default = {
@@ -23,13 +30,11 @@ variable "tags_name" {
 variable "sg_name" {
     type = string
     default = "allow-all-sg"
-  
 }
 
 variable "sg_des" {
     type = string
     default = "creating for the testing purpose"
-  
 }
 
 variable "from_port" {
@@ -40,7 +45,6 @@ variable "to_port" {
   type = number
   default = 0
 }
-
 
 variable "cidr_blocks" {
     type = list(string)

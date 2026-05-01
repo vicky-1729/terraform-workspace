@@ -1,10 +1,18 @@
+#============================================================
+# Variables for Dynamic Block Demo
+# Each port in the list becomes a separate ingress/egress rule
+#============================================================
+
+# List of ports to open for inbound traffic
 variable "ingress_ports" {
     type = list(number)
-    default = [22,443,80,2473,8080,6060]
+    default = [22, 443, 80, 2473, 8080, 6060]  # SSH, HTTPS, HTTP, custom ports
 }
+
+# List of ports to open for outbound traffic
 variable "egress_ports" {
     type = list(number)
-    default = [22,443,80,2473,8080,6060]
+    default = [22, 443, 80, 2473, 8080, 6060]
 }
 
 

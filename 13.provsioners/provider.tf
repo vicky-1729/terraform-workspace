@@ -1,3 +1,7 @@
+#============================================================
+# Provider with S3 Backend for Provisioners Demo
+#============================================================
+
 terraform {
   required_providers {
     aws = {
@@ -6,18 +10,15 @@ terraform {
     }
   }
   backend "s3" {
-    # aws azure
-    bucket = "vs-terraform-statefile"
-    key    = "vs-terraform-pro"
-    # dynamodb_table = "vs-terraform-file" # state locking--> depricated
-    use_lockfile = true  #S3 native locking
-    region = "us-east-1"
-    encrypt = true 
+    bucket       = "vs-terraform-statefile"
+    key          = "vs-terraform-pro"
+    use_lockfile = true   # S3 native locking
+    region       = "us-east-1"
+    encrypt      = true 
   }
 }
 
 provider "aws" {
-  # Configuration options
   region = "us-east-1"
 }
 

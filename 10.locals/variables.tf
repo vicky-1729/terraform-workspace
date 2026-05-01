@@ -1,4 +1,8 @@
+#============================================================
+# Variables for Locals Demo
+#============================================================
 
+# These 3 variables are combined in locals.tf using interpolation
 variable "project_name" {
   default = "roboshop"
 }
@@ -10,10 +14,14 @@ variable "env" {
 variable "component" {
   default = "testing"
 }
-# # not accepatble in terraform 
+
+# NOTE: You CANNOT do this in variables (expressions not allowed):
 # variable "final_name" {
-#   default = "${var.component}-${var.env}-${var-project_name}"
+#   default = "${var.component}-${var.env}-${var.project_name}"  # ERROR!
 # }
+# That's why we use LOCALS instead!
+
+# Maps used with merge() in locals
 variable "common_tags" {
   type = map(string)
   default = {

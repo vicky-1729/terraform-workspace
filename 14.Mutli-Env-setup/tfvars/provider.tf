@@ -1,3 +1,10 @@
+#============================================================
+# Provider with Dynamic Backend
+# backend "s3" {} is empty - values come from backend.tf files
+# terraform init -backend-config=dev/backend.tf  --> dev state
+# terraform init -backend-config=prod/backend.tf --> prod state
+#============================================================
+
 terraform {
   required_providers {
     aws = {
@@ -6,12 +13,11 @@ terraform {
     }
   }
   backend "s3" {
-  # based on my env
+    # Empty! Values injected via -backend-config flag
   }
 }
 
 provider "aws" {
-  # Configuration options
   region = "us-east-1"
 }
 

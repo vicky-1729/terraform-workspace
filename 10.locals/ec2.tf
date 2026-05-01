@@ -1,16 +1,19 @@
+#============================================================
+# EC2 using locals
+# Notice: tags = local.final (uses local, not var)
+#============================================================
+
 resource "aws_instance" "roboshop" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_all.id]
-  tags                   = local.final
+  tags                   = local.final  # Using LOCAL value (merged map)
 }
 
 resource "aws_security_group" "allow_all" {
-  # ... other configuration ...
-
   name        = var.sg_name
   description = var.sg_des
-  # incoming
+
   ingress {
     from_port        = var.from_port
     to_port          = var.to_port
@@ -19,7 +22,6 @@ resource "aws_security_group" "allow_all" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  # outgoing traffic
   egress {
     from_port        = var.from_port
     to_port          = var.to_port

@@ -1,3 +1,15 @@
+#============================================================
+# 11. Terraform State File (Local)
+# Topic: terraform.tfstate - The BRAIN of Terraform
+# Key Concepts:
+#   - State file tracks what resources Terraform manages
+#   - terraform.tfstate = current state (JSON format)
+#   - terraform.tfstate.backup = previous state backup
+#   - NEVER manually edit the state file!
+#   - State file contains sensitive data (IPs, IDs, etc.)
+# Commands: terraform state list | terraform state show <resource>
+#============================================================
+
 resource "aws_instance" "roboshop" {
   ami           = var.ami_id
   instance_type = var.instance_type
@@ -6,20 +18,17 @@ resource "aws_instance" "roboshop" {
 }
 
 resource "aws_security_group" "allow_all" {
-  # ... other configuration ...
-  
   name = var.sg_name
   description = var.sg_des
-  # incoming
-    ingress {
-        from_port        = var.from_port 
-        to_port          = var.to_port 
-        protocol         = "-1"
-        cidr_blocks      = var.cidr_blocks
-        ipv6_cidr_blocks = ["::/0"]
-      }
+
+  ingress {
+    from_port        = var.from_port 
+    to_port          = var.to_port 
+    protocol         = "-1"
+    cidr_blocks      = var.cidr_blocks
+    ipv6_cidr_blocks = ["::/0"]
+  }
       
-# outgoing traffic
   egress {
     from_port        = var.from_port
     to_port          = var.to_port
@@ -28,7 +37,7 @@ resource "aws_security_group" "allow_all" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags ={
+  tags = {
     Name = "allow-all-tags"
     purpose = "demo-purpose"
   }

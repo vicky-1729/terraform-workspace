@@ -1,38 +1,35 @@
+#============================================================
+# 08. Terraform Built-in Functions
+# Topic: length(), merge() and string interpolation
+# Key Functions Used:
+#   length(list) --> returns count of items in a list
+#   merge(map1, map2, ...) --> combines multiple maps into one
+# Try in console: terraform console --> length(["a","b","c"])
+#============================================================
+
 resource "aws_instance" "roboshop" {
-  count                  = length(var.instance_name)
+  # length() returns 4 (list has 4 items), so count = 4
+  count                  = length(var.instance_name)  # ["mongodb","redis","mysql","rabbitmq"]
   ami                    = var.ami_id
   instance_type          = "t2.small"
   vpc_security_group_ids = [aws_security_group.allow_all.id]
-  # tags = {
-  #   Name = "${var.instance_name[count.index]}-dev-server"
-  # }
+
+  # merge() combines multiple maps into a single map of tags
+  # Result: {project="Intel", terraform=true, version="1.0.0", component="test", Name="mongodb-dev-server"}
   tags = merge(
-    var.common_tags,
-    var.variable_tags,
+    var.common_tags,      # {project, terraform, version}
+    var.variable_tags,    # {component}
     {
-      Name = "${var.instance_name[count.index]}-dev-server"
+      Name = "${var.instance_name[count.index]}-dev-server"  # Dynamic name per instance
     }
   )
 }
 
-# resource "aws_instance" "server" {
-#   count = 4 # create four similar EC2 instances
-
-#   ami           = var.ami_id
-#   instance_type = "t2.micro"
-
-#   tags = {
-#     Name = "Server ${count.index}"
-#   }
-# }
-
 
 resource "aws_security_group" "allow_all" {
-  # ... other configuration ...
-
   name        = var.sg_name
   description = var.sg_des
-  # incoming
+
   ingress {
     from_port        = var.from_port
     to_port          = var.to_port
@@ -40,7 +37,7 @@ resource "aws_security_group" "allow_all" {
     cidr_blocks      = var.cidr_blocks
     ipv6_cidr_blocks = ["::/0"]
   }
-  # outgoing traffic
+
   egress {
     from_port        = var.from_port
     to_port          = var.to_port
