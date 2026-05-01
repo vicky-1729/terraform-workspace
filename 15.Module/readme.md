@@ -1,12 +1,34 @@
-# module is about create the ec2 instance resoucre
+# EC2 Instance Module
 
-## inputs
-1. `ami_id` this (optional) ,that deafult value of ami id: ami-0220d79f3f480ecf5
-2. `instance_type` this (opional), that default value is "t2.micro"  .you need provide (string)
-3. `sg_ids` (requried) and you need provide list(string)
-4. `tags` (requried) and you need provide map(string)
+A reusable Terraform module that creates an AWS EC2 instance.
 
-## output
- if you want public ip ---> `public_ip`
- if you want priavte ip ---> `private_ip`
- if you want instance ip ---> `instance_id`
+## Usage
+
+```hcl
+module "ec2" {
+  source        = "../15.Module"
+  sg_ids        = ["sg-0abc123def456"]
+  tags          = { Name = "my-server" }
+
+  # Optional overrides
+  # ami_id        = "ami-xxxxxxxxxxxxxxxxx"
+  # instance_type = "t3.medium"
+}
+```
+
+## Inputs
+
+| Name | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `ami_id` | `string` | No | `ami-0220d79f3f480ecf5` | AMI ID for the EC2 instance |
+| `instance_type` | `string` | No | `t2.micro` | EC2 instance type |
+| `sg_ids` | `list(string)` | Yes | — | List of security group IDs |
+| `tags` | `map(string)` | Yes | — | Tags to apply to the instance |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| `public_ip` | Public IP address of the instance |
+| `private_ip` | Private IP address of the instance |
+| `instance_id` | ID of the created EC2 instance |
